@@ -1,3 +1,13 @@
+local utils = require("utils")
+local menu = require("menu")
+-- TODO
+-- criar uma nova configuração para que o programa seja aberto em uma nova janela
+-- os.execute("kitty -- bash -c 'lua hello.lua; exec bash'")
+-- 
+--
+utils.showSpinner()
+print("\a")
+print(os.date("%A, %d in %b"))
 -- Definição da lista de tarefas
 Tarefas = {}
 Tarefa = {}
@@ -10,7 +20,10 @@ function Tarefa:new(descricao, prazo)
   setmetatable(novaTarefa, self)
   novaTarefa.prazo = prazo
   novaTarefa.descricao = descricao
-  novaTarefa.status = "PENDENTE"
+  novaTarefa.status = utils.yellow("PENDENTE")
+  print(utils.typingEffect(utils.bold(utils.green("\nNova tarefa criada:\n"))))
+  print(utils.typingEffect(utils.bold(utils.green("+ " .. novaTarefa.descricao .. ": " .. novaTarefa.status .. " | " .. tostring(novaTarefa.prazo)))))
+  print("\a")
   table.insert(Tarefas, novaTarefa)
   return novaTarefa
 end
@@ -19,36 +32,38 @@ end
 --
 function Tarefa:concluirTarefa()
   self.status = "CONCLUIDA"
-  print("Tarefa concluida!")
+  print(utils.typingEffect(utils.bold(utils.green("Tarefa concluida!"))))
   print(self.descricao .. ": " .. self.status)
 end
 
 -- Listar todas as tarefas
 function ListarTarefas()
-  for i, tarefa in pairs(Tarefas) do
-    print(i .. " - " .. tarefa.descricao .. ": " .. tarefa.status)
+  if (table.maxn(Tarefas) == 0) then
+    print(utils.typingEffect(utils.bold(utils.yellow("\nNão existem tarefas criadas!"))))
+  else
+    for i, tarefa in pairs(Tarefas) do
+      if (tarefa.status == "PENDENTE") then
+        print(utils.typingEffect("\n" .. i .. " - " .. tarefa.descricao .. ": " .. utils.bold(utils.yellow(tarefa.status) .. "\n")))
+      else if (tarefa.status == "CONCLUIDA") then
+        print(utils.typingEffect("\n" .. i .. " - " .. tarefa.descricao .. ": " .. utils.bold(utils.green(tarefa.status) .. "\n")))
+        end
+      end
+    end
   end
 end
 
 -- Menu
 while true do
-  print("### MENU ###")
-  print("Selecione a opcao desejada:")
-  print("1 - Criar uma nova tarefa")
-  print("2 - Marcar uma tarefa como concluida")
-  print("3 - Listar todas as tarefas criadas")
-  print("4 - Sair")
-  --
+  menu.exibir()
   local option = tonumber(io.read())
     if (option == 1) then
-        print("Informe a descricao da tarefa:\n")
+        print(utils.typingEffect(utils.bold("\nInforme a descricao da tarefa:")))
         local descricao = io.read()
-        io.write("Informe o prazo final da tarefa:\n")
-        local prazo = io.read()
+        local prazo = utils.requestDate()
         Tarefa:new(descricao, prazo)
   --
     elseif (option == 2) then
-      print("Selecione a tarefa desejada: ")
+      print(utils.typingEffect(utils.bold("\nSelecione a tarefa desejada: \n")))
       ListarTarefas()
       local opcao = tonumber(io.read())
       if Tarefas[opcao] then
@@ -58,9 +73,10 @@ while true do
       ListarTarefas()
   --
       elseif (option == 4) then
-        break
+        os.execute("clear")
+        os.exit()
   --
     else
-      print("Opcao invalida. Tente novamente")
+      print(utils.typingEffect(utils.bold("Opcao invalida. Tente novamente")))
     end
 end
