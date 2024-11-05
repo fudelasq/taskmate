@@ -16,17 +16,18 @@ TaskMate is a simple task manager developed entirely in Lua. This project was cr
 # How to Use
 
 - Clone the repository:
-
+```
 $ git clone https://github.com/fudelasq/taskmate.git
+```
 
 - Navigate to the project directory:
-
+```
 $ cd taskmate
-
+```
 - Run the program:
-
+```
 $ lua hello.lua
-
+```
 # Roadmap
 
 - [ ] Add task prioritization
