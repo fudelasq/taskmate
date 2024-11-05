@@ -17,15 +17,15 @@ TaskMate is a simple task manager developed entirely in Lua. This project was cr
 
 - Clone the repository:
 
-git clone https://github.com/fudelasq/taskmate.git
+$ git clone https://github.com/fudelasq/taskmate.git
 
 - Navigate to the project directory:
 
-cd taskmate
+$ cd taskmate
 
-# Run the program:
+- Run the program:
 
-lua hello.lua
+$ lua hello.lua
 
 # Roadmap
 
